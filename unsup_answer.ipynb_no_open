@@ -1,0 +1,207 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import numpy as np\n",
+    "%matplotlib inline\n",
+    "import matplotlib.pyplot as plt\n",
+    "import scipy.spatial.distance as dist\n",
+    "import sklearn.cluster as clst\n",
+    "import sys\n",
+    "from unsup_util import *\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Load data\n",
+    "- Please load the data from clust_datasets/\n",
+    "- For Basic Implementation:\n",
+    "    - moon (k=2)\n",
+    "    - spiral (k=3)\n",
+    "- For Challange:\n",
+    "    - pathbase (k=3)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Visuaize the data"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "X, k = Load_and_show_data(\"moon\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Run Kmeans Result"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "Run_Kmeans(X, k)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Exercise 1 : \n",
+    "\n",
+    "- Compute the Similarity matrix $W$ with Guassian Kernel\n",
+    "    - $w_{ij} = \\exp(-\\frac{(x_i-x_j)^2}{2\\sigma^2})$"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "## Answer\n",
+    "def make_similarity_mtx(D, std):\n",
+    "    ## WRITE ME!!\n",
+    "    Y_2 = dist.squareform(dist.pdist(D, 'sqeuclidean'))\n",
+    "    W = np.exp(-Y_2/(2*std**2))\n",
+    "    ## WRITE ME!!\n",
+    "    return W\n",
+    "###"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Reference Answers\n",
+    "# moon : sigma = 1.1\n",
+    "\n",
+    "sigma = 1.1\n",
+    "W = make_similarity_mtx(X, sigma)\n",
+    "\n",
+    "W_vis = np.log(W+sys.float_info.epsilon)\n",
+    "plt.imshow(W_vis, cmap='gray')\n",
+    "plt.title(\"similarity matrix\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Exercise 2 : \n",
+    "\n",
+    "- Try to adjust the parameter sigma and cluster it well, also observe the sensitivity with respect to parameter."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "Run_unnorm_SC(W, k, X)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Exercise 3 : \n",
+    "\n",
+    "- Try other data and try to cluster them well\n",
+    "- You can modify the similarity function if you want to :)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "X, k = Load_and_show_data(\"spiral\")\n",
+    "Run_Kmeans(X, k)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Reference Answers\n",
+    "# spiral : sigma = 1\n",
+    "# pathbase : N/A\n",
+    "sigma = 1\n",
+    "W = make_similarity_mtx(X, sigma)\n",
+    "\n",
+    "W_vis = np.log(W+sys.float_info.epsilon)\n",
+    "plt.imshow(W_vis, cmap='gray')\n",
+    "plt.title(\"similarity matrix\")\n",
+    "\n",
+    "Run_unnorm_SC(W, k, X)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## References : \n",
+    "\n",
+    "Dataset : https://cs.joensuu.fi/sipu/datasets/\n",
+    "- H. Chang and D.Y. Yeung, Robust path-based spectral clustering. Pattern Recognition, 2008. 41(1): p. 191-203. \n",
+    "- A. Jain and M. Law, Data clustering: A user's dilemma. Lecture Notes in Computer Science, 2005. 3776: p. 1-10. "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 2",
+   "language": "python",
+   "name": "python2"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 2
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython2",
+   "version": "2.7.6"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
